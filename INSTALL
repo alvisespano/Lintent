@@ -7,7 +7,7 @@ A Unix/Linux porting will be compiled very soon.
 
 +++ Installation Instructions: Windows
 
-- copy the contents of the bin folder (without the bin folder itself) into your Android Lint plug-in folder
+- copy the contents of the 'lint plug-in' folder (without the bin folder itself) into your Android Lint plug-in folder
 (typically C:\Users\your-user-name\.android\lint)
 
 - define a system environment variable ANDROID_LIBRARY referencing your Android SDK jar file
