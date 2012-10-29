@@ -1,0 +1,41 @@
+Lintent v0.1.0beta
+(C) 2011-2012 Alvise Spano', Stefano Calzavara, Michele Bugliesi - Universita' Ca' Foscari di Venezia
+
+Lintent is currently supports Windows only with .NET 4.0 or better.
+A Unix/Linux porting will be compiled very soon.
+
+
++++ Installation Instructions: Windows
+
+- copy the contents of the bin folder (without the bin folder itself) into your Android Lint plug-in folder
+(typically C:\Users\your-user-name\.android\lint)
+
+- define a system environment variable ANDROID_LIBRARY referencing your Android SDK jar file
+(typically C:\Program Files (x86)\Android\android-sdk\platforms\android-16\android.jar)
+
+
++++ Usage Instructions: Eclipse
+
+Assuming your Android Develpment Tools are fully functional and you installed Lintent according to
+the instructions above, the Lint plug-in should work out of the box.
+Just be sure that your Android Lint configuration enables Lintent as a valid plug-in and that you're running
+Android Lint on an Android project you wish to analyze.
+
+
++++ Usage Instructions: Windows Command Prompt or Shell
+
+From the command prompt you can use Lintent in client mode, i.e. forcing Android Lint invocation and
+outputting results to standard out.
+To try it quickly, open the command prompt or any Windows shell and type the following (where
+<ANDROID-PROJECT-ROOT> must be replaced by the full path of the root folder of an Android project
+you want to analyze.
+
+$> LintentEngine.exe -v --client-mode <ANDROID-PROJECT-ROOT>
+
+A verbose colored output is shown, notifying any type or permission inconsistency in the source code.
+For further command line options try passing '--help' to LintentEngine.exe.
+
+
+
+
+

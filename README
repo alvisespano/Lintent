@@ -1,9 +1,32 @@
-Lintent v0.23.11
-(C) 2011-2012 Alvise Spano', Stefano Calzavara, Michele Bugliesi - Universita' Ca' Foscari di Venezia
+Lintent v0.1.0alpha
+(C) 2012 Alvise Spano', Stefano Calzavara, Michele Bugliesi 
+	Universita' Ca' Foscari di Venezia
+For information on Lintent please contact:
+	spano at dais dot unive dot it.
 
-Lintent is under develpment and is currently in alpha stage; an early beta version will be committedù
-soon for testing purposes. Further updates and fixes will often be uploaded in the upcoming weeks.
+LIntent is still under active development and implements only a subset of
+its planned features. The tool is currently in alpha stage; an early beta
+version will be committed soon for testing purposes. We target daily updates
+in the next future, when we plan to significantly extend and revise our 
+type-checker. Reviewers interested in experimenting with the tool are
+encouraged to check for updates in the next few days, when we will also 
+upload some case studies to easily showcase the main features of our tool.
+We plan to deploy a Unix/Linux porting for Mono as soon as possible.
 
-Both the short and the full versions of the paper are available as well.
+Currently supported features
+	- detection of attack surfaces for privilege escalation 
+	- detection of over-privileged applications
+	- detection of runtime failures due to under-privilege
+	- detection of type mismatches upon IPC
+	- secrecy of pending intents
 
-For information on Lintent please contact spano at dais dot unive dot it.
+Forthcoming features (support planned in the next few days)
+	- support for Java annotations
+	- support for Android (bound) services
+	- integration with Android Lint
+
+Unsupported features (support will take some more time)
+	- analysis of broadcast receivers
+	- secrecy of IBinder's
+
+A complete account of the features is presented in the submitted paper.
