@@ -1,6 +1,7 @@
-Lintent v0.1.0alpha
+Lintent v1.0.1
 (C) 2012 Alvise Spano', Stefano Calzavara, Michele Bugliesi 
 	Universita' Ca' Foscari di Venezia
+	
 For information on Lintent please contact:
 	spano at dais dot unive dot it.
 
@@ -19,9 +20,9 @@ Currently supported features
 	- detection of runtime failures due to under-privilege
 	- detection of type mismatches upon IPC
 	- secrecy of pending intents
+	- support for Java annotations for enforcing and declassifying permissions
 
 Forthcoming features (support planned in the next few days)
-	- support for Java annotations
 	- support for Android (bound) services
 	- integration with Android Lint
 
