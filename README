@@ -1,4 +1,4 @@
-Lintent v1.0.1
+Lintent v1.0.2
 (C) 2012 Alvise Spano', Stefano Calzavara, Michele Bugliesi 
 	Universita' Ca' Foscari di Venezia
 	
@@ -21,13 +21,12 @@ Currently supported features
 	- detection of type mismatches upon IPC
 	- secrecy of pending intents
 	- support for Java annotations for enforcing and declassifying permissions
-
-Forthcoming features (support planned in the next few days)
-	- support for Android (bound) services
+	- support for special Java annotations 
 	- integration with Android Lint
 
 Unsupported features (support will take some more time)
 	- analysis of broadcast receivers
 	- secrecy of IBinder's
+	- support for Android (bound) services
 
 A complete account of the features is presented in the submitted paper.
