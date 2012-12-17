@@ -98,7 +98,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\FSharpCommon\FSharpCommon.fsproj">
+    <ProjectReference Include="..\FSharpCommon\FSharpCommon.fsproj">
       <Name>FSharpCommon</Name>
       <Project>{0c5b2468-77f1-42a9-b89a-d2028353d6da}</Project>
       <Private>True</Private>
