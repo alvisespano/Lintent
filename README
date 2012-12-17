@@ -5,14 +5,13 @@ Lintent v1.0.3
 For information on Lintent please contact:
 	spano at dais dot unive dot it.
 
-LIntent is still under active development and implements only a subset of
-its planned features. The tool is currently in alpha stage; an early beta
-version will be committed soon for testing purposes. We target daily updates
-in the next future, when we plan to significantly extend and revise our 
-type-checker. Reviewers interested in experimenting with the tool are
-encouraged to check for updates in the next few days, when we will also 
-upload some case studies to easily showcase the main features of our tool.
-We plan to deploy a Unix/Linux porting for Mono as soon as possible.
+Lintent is still under active development and implements only a subset of
+its planned features security-wide, though it already offers most type reconstruction
+features for intent and component analysis.
+The tool is currently in alpha stage. We target frequent updates
+in the future, when we plan to significantly extend and revise our 
+type-checker with an informatio-flow analyzer based on the Decentralized
+Label Model.
 
 Currently supported features
 	- detection of attack surfaces for privilege escalation 
@@ -28,5 +27,3 @@ Unsupported features (support will take some more time)
 	- analysis of broadcast receivers
 	- secrecy of IBinder's
 	- support for Android (bound) services
-
-A complete account of the features is presented in the submitted paper.
