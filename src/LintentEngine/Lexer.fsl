@@ -1,0 +1,228 @@
+﻿{
+
+module LintentEngine.Lexer
+
+open System
+open Microsoft.FSharp.Text.Lexing
+open LintentEngine.Parser
+open LintentEngine.Absyn
+open FSharpCommon.Prelude
+open FSharpCommon.Log
+
+module J = LintentEngine.Absyn.Java
+
+let newline (lexbuf : LexBuffer<_>) = lexbuf.EndPos <- lexbuf.EndPos.NextLine
+
+let newfile name (lexbuf : LexBuffer<_>) =
+    Globals.logger.msg Normal "parsing source file \"%s\"..." name
+    Parser.current_filename <- name
+}
+
+let whitespace = [' ' '\t']
+let newline = ('\n' | "\r\n")
+let digit = ['0'-'9']
+let nat = digit+
+let ureal = digit+ '.' digit+
+let uminus = "~-"
+let uminusdot = uminus '.'
+let real = ['-']? ureal
+let int = ['-']? nat
+let long = ['-'] nat 'L'
+let quoted = "\"" [^'"']* "\""
+let id = ['A'-'Z' 'a'-'z' '_']['a'-'z' 'A'-'Z' '0'-'9' '_']*
+let qid = id (('.' | '$') id)*
+
+rule x_tokenize = parse
+    | eof				{ EOF }
+    | newline			{ newline lexbuf; EOL }
+    | whitespace		{ x_tokenize lexbuf }
+    
+	| '('				{ BRA }
+    | ')'				{ KET }
+    | ','				{ COMMA }
+	| '['				{ SQBRA }
+	| "AND"				{ AND }
+	| "and"				{ AND }
+	| "OR"				{ OR }
+	| "or"				{ OR }
+	| "NONE"			{ NONE }
+
+	| 'I'				{ INT }
+	| 'J'				{ LONG }
+	| 'Z'				{ BOOLEAN }
+	| 'B'				{ BYTE }
+	| 'C'				{ CHAR }
+	| 'S'				{ SHORT }
+	| 'F'				{ FLOAT }
+	| 'D'				{ DOUBLE }
+
+    | "int"					{ INT }
+    | "long"				{ LONG }
+    | "boolean"				{ BOOLEAN }
+    | "byte"				{ BYTE }
+    | "char"				{ CHAR }
+    | "short"				{ SHORT }
+    | "float"				{ FLOAT }
+    | "double"				{ DOUBLE }
+
+	| 'L' qid ';'		{ let s = LexBuffer<_>.LexemeString lexbuf in QID (qid.of_string (s.Substring (1, s.Length - 2))) } 
+	| qid				{ let s = LexBuffer<_>.LexemeString lexbuf in QID (qid.of_string s) }
+
+
+and lombok_java_tokenize = parse
+
+    | eof   { EOF }
+    | whitespace		{ lombok_java_tokenize lexbuf }
+    | newline			{ newline lexbuf; lombok_java_tokenize lexbuf }
+
+    // punctuation
+    | '('				{ BRA }
+    | ')'				{ KET }
+	| '{'				{ CUR }
+	| '}'				{ KET }
+    | ','				{ COMMA }
+	| '.'				{ DOT }
+    | ";"				{ SEMICOLON }
+    | ":"				{ COLON }
+
+
+    // visibility
+    | "public"			{ PUBLIC }
+    | "private"			{ PRIVATE }
+    | "package"			{ PACKAGE }
+    | "protected"		{ PROTECTED }
+
+	// introduction
+	| "@UsesPermissions"	{ USES_PERMISSIONS }
+	| "@DefinesPermissions"	{ DEFINES_PERMISSIONS }
+	| "@CallingPermissions" { CALLING_PERMISSIONS }
+	| "@ImplicitImports"		{ IMPLICIT_IMPORTS }
+
+    // literals
+    | int					{ INT_LIT (Int32.Parse (LexBuffer<_>.LexemeString lexbuf)) }
+    | int 'L'				{ LONG_LIT (Int64.Parse ((LexBuffer<_>.LexemeString lexbuf).Substring (0, lexbuf.LexemeLength-1))) }
+    | real					{ DOUBLE_LIT (Double.Parse (LexBuffer<_>.LexemeString lexbuf, Globalization.NumberStyles.Float, new Globalization.CultureInfo ("en-US"))) }
+    | real 'f'				{ FLOAT_LIT (Single.Parse ((LexBuffer<_>.LexemeString lexbuf).Substring (0, lexbuf.LexemeLength-1), Globalization.NumberStyles.Float, new Globalization.CultureInfo ("en-US"))) }
+    | "true"				{ TRUE }
+    | "false"				{ FALSE }
+    | '@' quoted			{ let s = LexBuffer<_>.LexemeString lexbuf in let s = s.Trim [|'\"'; '@'|] in newfile s lexbuf; FILENAME s }
+    | quoted				{ let s = LexBuffer<_>.LexemeString lexbuf in STRING_LIT (s.Trim [|'\"'|]) }
+    | '\'' [^'\''] '\''		{ let s = LexBuffer<_>.LexemeString lexbuf in CHAR_LIT ((s.Trim [|'\''|]).Chars 0) }
+    | "ArrayInit"			{ ARRAY_INIT }	
+    | "ArrayLit"			{ ARRAY_LIT }	
+
+    | "Super"				{ SUPER }
+
+    // statements
+    | "Return"				{ RETURN }
+    | "Throw"				{ THROW }
+    | "If"					{ IF }
+    | "While"				{ WHILE }
+    | "DoWhile"				{ DO_WHILE }
+    | "For"					{ FOR }
+    | "ForEach"				{ FOR_EACH }
+    | "Try"					{ TRY }
+    | "Switch"				{ SWITCH }
+    | "Break"				{ BREAK }
+    | "Continue"			{ CONTINUE }
+    | "ThisCons"			{ THIS_CONS }
+    | "SuperCons"			{ SUPER_CONS }
+    | "Assert"				{ ASSERT }
+    | "LabelledStatement"	{ LABELLED_STATEMENT }
+	| "EmptyStatement"		{ lombok_java_tokenize lexbuf }
+
+    // expressions
+    | "This"				{ THIS }
+    | "Null"				{ NULL }
+    | "Cast"				{ CAST }
+    | "Call"				{ CALL }
+    | "Select"				{ SELECT }
+    | "Subscript"			{ SUBSCRIPT }
+    | "Cons"				{ CONS }
+    | "InlineIf"			{ INL_IF }
+    | "ClassOp"				{ CLASS_OP }
+
+    // types
+    | "int"					{ INT }
+    | "boolean"				{ BOOLEAN }
+    | "long"				{ LONG }
+    | "float"				{ FLOAT }
+    | "double"				{ DOUBLE }
+    | "short"				{ SHORT }
+    | "byte"				{ BYTE }
+    | "char"				{ CHAR }
+    | "Wildcard"			{ WILDCARD }
+    | "WildcardExtends"		{ WILDCARD_EXT }
+    | "WildcardSuper"		{ WILDCARD_SUP }
+    
+    // operators
+	| "ASSIGN"					{ ASSIGN }
+    | "UNARY_MINUS"				{ NEG }
+    | "UNARY_PLUS"				{ UPLUS }
+    | "LOGICAL_NOT"				{ NOT }
+    | "BINARY_NOT"				{ BNOT }
+    | "PREFIX_INCREMENT"		{ PREINC }
+    | "POSTFIX_INCREMENT"		{ POSTINC }
+    | "PREFIX_DECREMENT"		{ PREDEC }
+    | "POSTFIX_DECREMENT"		{ POSTDEC }
+    | "PLUS"					{ PLUS }
+    | "MINUS"					{ MINUS }
+    | "MULTIPLY"				{ MULT }
+    | "DIVIDE"					{ DIV }
+    | "REMAINDER"				{ MOD }
+    | "SHIFT_LEFT"				{ LSH }
+    | "SHIFT_RIGHT"				{ RSH }
+    | "ARITHMETIC_SHIFT_RIGHT"	{ ASHR }
+    | "BITWISE_AND"				{ AND }
+    | "BITWISE_XOR"				{ XOR }
+    | "BITWISE_OR"				{ OR }
+    | "EQUALS"					{ EQ }
+    | "NOT_EQUALS"				{ NEQ }
+    | "LESS"					{ LT }
+    | "GREATER"					{ GT }
+    | "LESS_OR_EQUAL"			{ LEQ }
+    | "GREATER_OR_EQUAL"		{ GEQ }
+    | "LOGICAL_OR"				{ LOR }
+    | "LOGICAL_AND"				{ LAND }
+
+    // variables
+    | id				{ ID (LexBuffer<_>.LexemeString lexbuf) }
+    | qid				{ QID (qid.of_string (LexBuffer<_>.LexemeString lexbuf)) }
+
+
+
+and dlm_comment = parse
+    | '*' (')' | '/')	{ dlm_tokenize lexbuf }
+    | newline			{ newline lexbuf; dlm_comment lexbuf }
+    | _					{ dlm_comment lexbuf }
+
+and dlm_tokenize = parse
+    | whitespace		{ dlm_tokenize lexbuf }
+    | newline			{ newline lexbuf; dlm_tokenize lexbuf }
+    
+    // operators
+    | "->" | ":"			{ READ }
+    | "<-"					{ WRITE }
+    | "+" | "|" | "||"		{ JOIN }
+    | "*" | "&" | "&&"		{ MEET }
+
+    // lattice
+    | "^"					{ TOP }
+    | "_"					{ BOTTOM }
+	| "Top"					{ TOP }
+	| "Bottom"				{ BOTTOM }
+
+    // brakets
+    | '('			{ BRA }
+    | ')'			{ KET }
+
+    // punctuation
+    | ";"			{ SEMICOLON }
+    | ","			{ COMMA }
+
+    // identifiers
+    | id					{ ID (LexBuffer<_>.LexemeString lexbuf) }
+
+    // EOF
+    | eof   { EOF }
+
