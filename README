@@ -14,6 +14,7 @@ type-checker with an informatio-flow analyzer based on the Decentralized
 Label Model.
 
 Currently supported features
+	- all type reconstruction features of intents and components
 	- detection of attack surfaces for privilege escalation 
 	- detection of over-privileged applications
 	- detection of runtime failures due to under-privilege
@@ -23,7 +24,8 @@ Currently supported features
 	- support for special Java annotations 
 	- integration with Android Lint
 
-Unsupported features (support will take some more time)
+Unsupported features or known bugs (support will take some more time)
+	- loading and inspection of external libraries does not work as intended
 	- analysis of broadcast receivers
 	- secrecy of IBinder's
 	- support for Android (bound) services
