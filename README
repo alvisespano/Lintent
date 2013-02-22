@@ -1,17 +1,19 @@
-Lintent v1.0.3
+Lintent v1.0.4
 (C) 2012 Alvise Spano', Stefano Calzavara, Michele Bugliesi 
 	Universita' Ca' Foscari di Venezia
 	
 For information on Lintent please contact:
 	spano at dais dot unive dot it.
 
-Lintent is still under active development and implements only a subset of
-its planned features security-wide, though it already offers most type reconstruction
-features for intent and component analysis.
-The tool is currently in alpha stage. We target frequent updates
-in the future, when we plan to significantly extend and revise our 
-type-checker with an informatio-flow analyzer based on the Decentralized
-Label Model.
+Lintent is still under active development and implements a subset of
+its planned features - pretty wide subset, thoguh.
+We target frequent updates in the near future, when we plan to significantly
+extend and revise our analyzer.
+Reviewers interested in experimenting with the tool are encouraged to check
+for further updates, as we will also upload upload additional case studies to
+easily showcase the main features of our tool.
+We also plan to deploy a Unix/Linux porting of Lintent for Mono sooner or later.
+
 
 Currently supported features
 	- all type reconstruction features of intents and components
@@ -21,11 +23,16 @@ Currently supported features
 	- detection of type mismatches upon IPC
 	- secrecy of pending intents
 	- support for Java annotations for enforcing and declassifying permissions
-	- support for special Java annotations 
 	- integration with Android Lint
-
-Unsupported features or known bugs (support will take some more time)
-	- loading and inspection of external libraries does not work as intended
-	- analysis of broadcast receivers
-	- secrecy of IBinder's
+	- analysis of activities, services and broadcast receivers
+	- preliminary support for Java reflection
+	- preliminary support for generics and type variable constraints
+	
+Forthcoming features (support planned in the next few days)
 	- support for Android (bound) services
+
+Unsupported features (support will take some more time)
+	- secrecy of IBinder's
+
+A formal description of Lintent security features is presented in the submitted paper.
+

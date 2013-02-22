@@ -1,2 +1,0 @@
-android.view.InputMethod,android.permission.BIND_INPUT_METHOD
-android.service.wallpaper.WallpaperService,android.permission.BIND_WALLPAPER
