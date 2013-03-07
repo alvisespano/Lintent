@@ -1,4 +1,4 @@
-Lintent v1.0.4
+Lintent v1.0.6
 (C) 2012 Alvise Spano', Stefano Calzavara, Michele Bugliesi 
 	Universita' Ca' Foscari di Venezia
 	
@@ -27,6 +27,7 @@ Currently supported features
 	- analysis of activities, services and broadcast receivers
 	- preliminary support for Java reflection
 	- preliminary support for generics and type variable constraints
+	- support for Java old-style as well as post-1.5 enums
 	
 Forthcoming features (support planned in the next few days)
 	- support for Android (bound) services
